@@ -1,4 +1,4 @@
-package com.aston.assessment;
+package com.aston.assessment.model;
 
 public enum UserRoles {
     MODERATOR,
