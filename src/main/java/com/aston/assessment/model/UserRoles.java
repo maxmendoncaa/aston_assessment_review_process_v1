@@ -11,11 +11,9 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public enum UserRoles {
-    MODERATOR(Collections.emptySet()),
-    EXTERNAL_EXAMINER(Collections.emptySet()),
-    INTERNAL_MODERATOR(Collections.emptySet()),
-    ASSESSMENT_LEAD(Collections.emptySet()),
-    PROGRAMME_DIRECTOR(Collections.emptySet()),
+    PROFESSOR(Collections.emptySet()),
+    DIRECTOR(Collections.emptySet()),
+    ADMIN(Collections.emptySet()),
     NOT_SPECIFIED(Collections.emptySet());
 
     @Getter
