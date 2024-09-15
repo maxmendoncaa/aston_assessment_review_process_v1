@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import java.util.List;
 import java.util.Collection;
 
 @Data
@@ -38,15 +38,13 @@ public class Users implements UserDetails {
     @Column(nullable = false)
     private UserRoles role = UserRoles.NOT_SPECIFIED;
 
+    @OneToMany(mappedBy = "user")
+    private List<AssessmentParticipant> assessmentParticipations;
 
+    // UserDetails interface methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
     }
 
     @Override

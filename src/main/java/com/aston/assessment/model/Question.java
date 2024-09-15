@@ -13,10 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "Questions")
 public class Question {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
     private Long id;
 
     @Column(nullable = false)
@@ -28,5 +26,11 @@ public class Question {
     @Column
     private String comment;
 
-    // Additional methods or fields if necessary
+    @ManyToOne
+    @JoinColumn(name = "assessment_id")
+    private Assessment assessment;
+
+    @ManyToOne
+    @JoinColumn(name = "internal_moderator_id")
+    private InternalModerator internalModerator;
 }

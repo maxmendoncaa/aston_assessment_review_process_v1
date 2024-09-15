@@ -6,31 +6,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ProgrammeDirectorConfirmations")
-public class ProgrammeDirectorConfirmation {
+@Table(name = "ModuleAssessmentLeadSignatures")
+public class ModuleAssessmentLead {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "programme_director_confirmation_id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "assessment_id", nullable = false)
-    private Assessment assessment;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
-
-    @Column(nullable = false)
-    private boolean appropriatelyResponded;
+    @OneToMany(mappedBy = "moduleAssessmentLead")
+    private Set<Assessment> assessment;
 
     @Column(nullable = false)
     private LocalDate signatureDate;
+
+
 }

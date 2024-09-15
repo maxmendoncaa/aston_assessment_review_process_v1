@@ -6,21 +6,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ProgrammeDirectorConfirmations")
-public class ProgrammeDirectorConfirmation {
+@Table(name = "AssessmentParticipants",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"assessment_id", "user_id", "role"}))
+public class AssessmentParticipant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "programme_director_confirmation_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "assessment_id", nullable = false)
     private Assessment assessment;
 
@@ -28,9 +26,7 @@ public class ProgrammeDirectorConfirmation {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean appropriatelyResponded;
-
-    @Column(nullable = false)
-    private LocalDate signatureDate;
+    private AssessmentRoles role;
 }
