@@ -131,4 +131,10 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return repository.existsByEmail(email);
     }
+
+    public UserRoles getUserRole(String email) {
+        return repository.findByEmail(email)
+                .map(Users::getRole)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }

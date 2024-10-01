@@ -21,23 +21,26 @@ public class Module {
     @Column(name = "module_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "module_name", unique = true)
+    private String moduleName;
+
+    @Column(name = "module_code", unique = true)
     private String moduleCode;
 
-    @Column(nullable = false)
+    @Column(name = "level")
     private int level;
 
-    @Column(nullable = false)
+    @Column(name = "module_leader")
     private String moduleLeader;
 
-    @Column(nullable = false)
+    @Column(name = "credits")
     private int credits;
 
-    @Column(nullable = false)
+    @Column(name = "module_outcomes")
     private String moduleOutcomes; // This could also be a List<String> if you want multiple outcomes stored separately
 
-    @Column(nullable = false)
-    private String skillsAndBehaviours; // This could also be a List<String> if you want multiple skills/behaviours stored separately
+    @Column(name = "skills")
+    private String skills; // This could also be a List<String> if you want multiple skills/behaviours stored separately
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL)
     private List<Assessment> assessments;
