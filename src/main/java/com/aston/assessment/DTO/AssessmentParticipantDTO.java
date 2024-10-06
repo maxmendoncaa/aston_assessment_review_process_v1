@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssessmentParticipantDTO {
     private Long userId;
-    private AssessmentRoles role;
+    private Set<AssessmentRoles> roles;
+
 }

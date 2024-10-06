@@ -1,5 +1,6 @@
 package com.aston.assessment.controller;
 
+import com.aston.assessment.DTO.AssessmentDTO;
 import com.aston.assessment.DTO.ModuleWithAssessmentsDTO;
 import com.aston.assessment.model.Module;
 import com.aston.assessment.model.Assessment;
@@ -8,9 +9,12 @@ import com.aston.assessment.service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -43,12 +47,10 @@ public class ModuleController {
 //    }
 //}
     @PostMapping("/create")
-    public ResponseEntity<?> createModuleWithAssessments(@RequestBody ModuleWithAssessmentsDTO moduleDTO, Authentication authentication) {
+    public ResponseEntity<?> createModuleWithAssessments(@RequestBody ModuleWithAssessmentsDTO moduleDTO, Principal principal) {
         try {
-            if (authentication == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-            Users user = (Users) authentication.getPrincipal();
+
+            Users user = (Users)((UsernamePasswordAuthenticationToken) principal).getPrincipal();
             Module createdModule = moduleService.createModuleWithAssessments(moduleDTO, user.getUserId());
             return ResponseEntity.ok(createdModule);
         } catch (IllegalArgumentException e) {
@@ -108,5 +110,20 @@ public class ModuleController {
     public ResponseEntity<?> assignRole(@PathVariable Long id, @RequestParam Long userId, @RequestParam String role) {
         moduleService.assignRole(id, userId, role);
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/{moduleId}/assessments/user")
+    public ResponseEntity<?> getUserAssessmentsForModule(
+            @PathVariable Long moduleId,
+            Authentication authentication) {
+        if (moduleId == null) {
+            return ResponseEntity.badRequest().body("Invalid module ID");
+        }
+        String userEmail = authentication.getName();
+        try {
+            List<AssessmentDTO> assessments = moduleService.getUserAssessmentsForModule(moduleId, userEmail);
+            return ResponseEntity.ok(assessments);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.aston.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
         import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class Module {
     @Column(name = "module_id")
     private Long id;
 
-    @Column(name = "module_name", unique = true)
+    @Column(name = "module_name")
     private String moduleName;
 
     @Column(name = "module_code", unique = true)
@@ -42,6 +43,7 @@ public class Module {
     @Column(name = "skills")
     private String skills; // This could also be a List<String> if you want multiple skills/behaviours stored separately
 
+    @JsonBackReference
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL)
     private List<Assessment> assessments;
 

@@ -17,6 +17,7 @@ import java.time.LocalDate;
 public class ExternalExaminerResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="external_examiner_response_id")
     private Long id;
 
     @ManyToOne

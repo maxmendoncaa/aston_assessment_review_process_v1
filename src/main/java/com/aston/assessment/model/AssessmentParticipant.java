@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,7 +29,10 @@ public class AssessmentParticipant {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "assessment_participant_roles",
+            joinColumns = @JoinColumn(name = "participant_id"))
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AssessmentRoles role;
+    private Set<AssessmentRoles> roles = new HashSet<>();
 }

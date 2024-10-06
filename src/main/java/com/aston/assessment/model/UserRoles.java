@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public enum UserRoles {
     ACADEMIC(Collections.emptySet()),
-    DIRECTOR(Collections.emptySet()),
     ADMIN(Collections.emptySet()),
     NOT_SPECIFIED(Collections.emptySet());
 

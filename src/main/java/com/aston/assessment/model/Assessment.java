@@ -112,6 +112,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -164,10 +165,10 @@ public class Assessment {
     private ModuleAssessmentLead moduleAssessmentLead;
 
     @Column(name = "module_assessment_lead_signature")
-    private String moduleAssessmentLeadSignature;
+    private String moduleAssessmentLeadSignature="Pending";
 
     @Column(name = "module_assessment_lead_signature_date")
-    private LocalDate moduleAssessmentLeadSignatureDate;
+    private LocalDateTime moduleAssessmentLeadSignatureDate=null;
 
 
 

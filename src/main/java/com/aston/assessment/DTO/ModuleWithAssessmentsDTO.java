@@ -10,9 +10,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModuleWithAssessmentsDTO {
-    private String name;
-    private String code;
+    private String moduleName;
+    private String moduleLeader;
+    private String moduleCode;
     private int credits;
     private int level;
     private List<AssessmentDTO> assessments;
+    private String moduleOutcomes;
+    
 }

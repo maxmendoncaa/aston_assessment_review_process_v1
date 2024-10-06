@@ -1,5 +1,7 @@
 package com.aston.assessment.controller;
 
+import com.aston.assessment.DTO.AssessmentDTO;
+import com.aston.assessment.DTO.AssessmentUpdateDTO;
 import com.aston.assessment.model.Assessment;
 import com.aston.assessment.model.AssessmentRoles;
 import com.aston.assessment.model.ModuleAssessmentLead;
@@ -7,6 +9,7 @@ import com.aston.assessment.model.Question;
 import com.aston.assessment.service.AssessmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,5 +84,20 @@ public class AssessmentController {
         return ResponseEntity.ok().build();
     }
 
-    // You can add more endpoints here if needed
+    @GetMapping("/{id}")
+    public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long id, Authentication authentication) {
+        String userEmail = authentication.getName();
+        AssessmentDTO assessment = assessmentService.getAssessmentForUser(id, userEmail);
+        return ResponseEntity.ok(assessment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AssessmentDTO> updateAssessment(
+            @PathVariable Long id,
+            @RequestBody AssessmentUpdateDTO updateDTO,
+            Authentication authentication) {
+        String userEmail = authentication.getName();
+        AssessmentDTO updatedAssessment = assessmentService.updateAssessment(id, updateDTO, userEmail);
+        return ResponseEntity.ok(updatedAssessment);
+    }
 }

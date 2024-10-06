@@ -1,5 +1,6 @@
 package com.aston.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,7 @@ public class Users implements UserDetails {
     private UserRoles role = UserRoles.NOT_SPECIFIED;
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private List<AssessmentParticipant> assessmentParticipations;
 
     // UserDetails interface methods

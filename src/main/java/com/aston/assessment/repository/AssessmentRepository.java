@@ -2,6 +2,7 @@ package com.aston.assessment.repository;
 
 import com.aston.assessment.model.Assessment;
 import com.aston.assessment.model.AssessmentStage;
+import com.aston.assessment.model.Module;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,5 +45,6 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Long> {
     // Count assessments for a specific module
     long countByModuleId(Long moduleId);
 
+    List<Assessment> findByModuleAndParticipantsUserEmail(Module module, String userEmail);
 
 }

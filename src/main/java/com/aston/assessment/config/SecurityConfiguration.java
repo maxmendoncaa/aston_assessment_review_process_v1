@@ -44,6 +44,7 @@ public class SecurityConfiguration {
             "/webjars/**",
             "/swagger-ui.html",
             "/login",
+            "api/v1/users/all",
            // "/dashboard",
 
             "api/auth/login"
@@ -67,9 +68,11 @@ public class SecurityConfiguration {
 //                                .requestMatchers("/api/student-choices").hasAnyRole(STUDENT.name())
 //                                .requestMatchers("/api/v1/projects").hasAnyRole(SUPERVISOR.name())
                                 .requestMatchers("/{id}/assign-role").hasRole("ADMIN")
+
                                 .requestMatchers("api/v1/users/me").permitAll()
                                 .requestMatchers("api/v1/users/by-email").permitAll()
                                 .requestMatchers("/api/v1/modules/**").authenticated()
+                                .requestMatchers("api/v1/assessments/**").authenticated()
                                 .anyRequest()
                                 .authenticated()
 
