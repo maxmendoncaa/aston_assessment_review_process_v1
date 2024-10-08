@@ -133,6 +133,9 @@ public class Assessment {
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
+    private String skills;
+
     @Column(nullable = false)
     private int assessmentWeighting;
 

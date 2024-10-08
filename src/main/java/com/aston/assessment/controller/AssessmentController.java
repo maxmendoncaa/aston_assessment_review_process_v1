@@ -2,10 +2,7 @@ package com.aston.assessment.controller;
 
 import com.aston.assessment.DTO.AssessmentDTO;
 import com.aston.assessment.DTO.AssessmentUpdateDTO;
-import com.aston.assessment.model.Assessment;
-import com.aston.assessment.model.AssessmentRoles;
-import com.aston.assessment.model.ModuleAssessmentLead;
-import com.aston.assessment.model.Question;
+import com.aston.assessment.model.*;
 import com.aston.assessment.service.AssessmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -84,20 +81,32 @@ public class AssessmentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long id, Authentication authentication) {
-        String userEmail = authentication.getName();
-        AssessmentDTO assessment = assessmentService.getAssessmentForUser(id, userEmail);
-        return ResponseEntity.ok(assessment);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long id, Authentication authentication) {
+//        String userEmail = authentication.getName();
+//        AssessmentDTO assessment = assessmentService.getAssessmentForUser(id, userEmail);
+//        return ResponseEntity.ok(assessment);
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<AssessmentDTO> updateAssessment(
+//            @PathVariable Long id,
+//            @RequestBody AssessmentUpdateDTO updateDTO,
+//            Authentication authentication) {
+//        String userEmail = authentication.getName();
+//        AssessmentDTO updatedAssessment = assessmentService.updateAssessment(id, updateDTO, userEmail);
+//        return ResponseEntity.ok(updatedAssessment);
+//    }
+        @GetMapping("/{id}")
+        public ResponseEntity<AssessmentDTO> getAssessment(@PathVariable Long id) {
+            AssessmentDTO assessment = assessmentService.getAssessmentById(id);
+            return ResponseEntity.ok(assessment);
+        }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AssessmentDTO> updateAssessment(
-            @PathVariable Long id,
-            @RequestBody AssessmentUpdateDTO updateDTO,
-            Authentication authentication) {
-        String userEmail = authentication.getName();
-        AssessmentDTO updatedAssessment = assessmentService.updateAssessment(id, updateDTO, userEmail);
-        return ResponseEntity.ok(updatedAssessment);
-    }
+            @PutMapping("/{id}")
+            public ResponseEntity<AssessmentDTO> updateAssessment(@PathVariable Long id, @RequestBody AssessmentDTO assessmentDTO) {
+
+                AssessmentDTO updatedAssessment = assessmentService.updateAssessment(id, assessmentDTO);
+                return ResponseEntity.ok(updatedAssessment);
+            }
 }

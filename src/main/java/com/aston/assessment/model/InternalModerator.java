@@ -78,18 +78,18 @@ public class InternalModerator {
     @Column(name = "general_comment")
     private String generalComment;
 
-    @Column(name = "internal_moderator_signature", nullable = false)
+    @Column(name = "internal_moderator_signature")
     private String internalModeratorSignature;
 
-    @Column(name = "internal_moderator_signature_date", nullable = false)
+    @Column(name = "internal_moderator_signature_date")
     private LocalDate internalModeratorSignatureDate;
 
     @Column(name = "response_to_internal_moderator")
     private String responseToInternalModerator;
 
-    @Column(name = "response_signature", nullable = false)
+    @Column(name = "response_signature")
     private String responseSignature;
 
-    @Column(name = "response_date", nullable = false)
+    @Column(name = "response_date")
     private LocalDate responseDate;
 }

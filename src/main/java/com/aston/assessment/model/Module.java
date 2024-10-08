@@ -40,8 +40,8 @@ public class Module {
     @Column(name = "module_outcomes")
     private String moduleOutcomes; // This could also be a List<String> if you want multiple outcomes stored separately
 
-    @Column(name = "skills")
-    private String skills; // This could also be a List<String> if you want multiple skills/behaviours stored separately
+//    @Column(name = "skills", columnDefinition = "TEXT")
+//    private String skills; // This could also be a List<String> if you want multiple skills/behaviours stored separately
 
     @JsonBackReference
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL)

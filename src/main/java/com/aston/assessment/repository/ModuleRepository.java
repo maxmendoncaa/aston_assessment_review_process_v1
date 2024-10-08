@@ -24,7 +24,7 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     List<Module> findByModuleNameContainingIgnoreCase(String moduleName);
 
     // Corrected method name to match the property name in Module entity
-    List<Module> findBySkills(String skills);
+   // List<Module> findBySkills(String skills);
 
     //List<Module> findByNameContainingIgnoreCase(String moduleName);
 

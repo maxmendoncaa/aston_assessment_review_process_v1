@@ -45,6 +45,5 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Long> {
     // Count assessments for a specific module
     long countByModuleId(Long moduleId);
 
-    List<Assessment> findByModuleAndParticipantsUserEmail(Module module, String userEmail);
-
+    List<Assessment> findByModuleAndParticipantsUserEmail(Module module, String userEmail);List<Assessment> findByModule(Module module);
 }

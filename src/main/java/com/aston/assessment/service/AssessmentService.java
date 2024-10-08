@@ -372,4 +372,82 @@ public class AssessmentService {
 
         return dto;
     }
+    public AssessmentDTO getAssessmentById(Long id) {
+        Assessment assessment = assessmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Assessment not found with id: " + id));
+        return mapToDTO(assessment);
+    }
+
+    @Transactional
+    public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
+        Assessment assessment = assessmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Assessment not found with id: " + id));
+
+        // Update fields based on user roles
+        Set<String> userRoles = assessmentDTO.getUserRoles();
+
+        if (userRoles.contains(AssessmentRoles.MODULE_ASSESSMENT_LEAD.name())) {
+            assessment.setModuleAssessmentLeadSignature(assessmentDTO.getModuleAssessmentLeadSignature());
+            assessment.setModuleAssessmentLeadSignatureDate(LocalDateTime.now());
+            assessment.setSkills(assessmentDTO.getSkills());
+            assessment.setModuleAssessmentLeadSignature(assessmentDTO.getModuleAssessmentLeadSignature());
+
+            assessment.setModuleAssessmentLeadSignatureDate(
+                    assessmentDTO.getModuleAssessmentLeadSignatureDate() != null
+                            ? assessmentDTO.getModuleAssessmentLeadSignatureDate()
+                            : LocalDateTime.now()
+            );
+        }
+
+        if (userRoles.contains(AssessmentRoles.INTERNAL_MODERATOR.name())) {
+            InternalModerator moderator = assessment.getInternalModerator();
+            if (moderator == null) {
+                moderator = new InternalModerator();
+                moderator.setAssessment(assessment);
+                assessment.setInternalModerator(moderator);
+            }
+            moderator.setGeneralComment(assessmentDTO.getInternalModeratorComments());
+            moderator.setInternalModeratorSignature(assessmentDTO.getInternalModeratorSignature());
+            moderator.setInternalModeratorSignatureDate(LocalDate.now());
+        }
+
+        // Update other fields based on roles...
+
+        Assessment updatedAssessment = assessmentRepository.save(assessment);
+        return mapToDTO(updatedAssessment);
+    }
+
+    private AssessmentDTO mapToDTO(Assessment assessment) {
+        AssessmentDTO dto = new AssessmentDTO();
+        dto.setId(assessment.getId());
+        dto.setTitle(assessment.getTitle());
+        dto.setAssessmentCategory(assessment.getAssessmentCategory());
+        dto.setAssessmentWeighting(assessment.getAssessmentWeighting());
+        dto.setPlannedIssueDate(assessment.getPlannedIssueDate());
+        dto.setCourseworkSubmissionDate(assessment.getCourseworkSubmissionDate());
+        dto.setSkills(assessment.getSkills());
+
+        if (assessment.getModule() != null) {
+            dto.setModuleCode(assessment.getModule().getModuleCode());
+            dto.setModuleLeader(assessment.getModule().getModuleLeader());
+        }
+
+        dto.setModuleAssessmentLeadSignature(assessment.getModuleAssessmentLeadSignature());
+        dto.setModuleAssessmentLeadSignatureDate(assessment.getModuleAssessmentLeadSignatureDate());
+
+        if (assessment.getInternalModerator() != null) {
+            dto.setInternalModeratorComments(assessment.getInternalModerator().getGeneralComment());
+            dto.setInternalModeratorSignature(assessment.getInternalModerator().getInternalModeratorSignature());
+            dto.setInternalModeratorSignatureDate(assessment.getInternalModerator().getInternalModeratorSignatureDate());
+        }
+
+        // Map other fields...
+
+        dto.setUserRoles(assessment.getParticipants().stream()
+                .flatMap(participant -> participant.getRoles().stream())
+                .map(AssessmentRoles::name)
+                .collect(Collectors.toSet()));
+
+        return dto;
+    }
 }

@@ -126,4 +126,10 @@ public class ModuleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/{moduleCode}/with-assessments")
+    public ResponseEntity<ModuleWithAssessmentsDTO> getModuleWithAssessments(@PathVariable String moduleCode) {
+        ModuleWithAssessmentsDTO moduleWithAssessments = moduleService.getModuleWithAssessments(moduleCode);
+        return ResponseEntity.ok(moduleWithAssessments);
+    }
 }

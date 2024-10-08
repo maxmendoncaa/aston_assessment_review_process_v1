@@ -17,5 +17,6 @@ public class ModuleWithAssessmentsDTO {
     private int level;
     private List<AssessmentDTO> assessments;
     private String moduleOutcomes;
+
     
 }

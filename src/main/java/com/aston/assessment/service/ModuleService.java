@@ -193,6 +193,7 @@ public class ModuleService {
                 assessment.setPlannedIssueDate(assessmentDTO.getPlannedIssueDate());
                 assessment.setCourseworkSubmissionDate(assessmentDTO.getCourseworkSubmissionDate());
                 assessment.setModule(module);
+                assessment.setSkills(assessmentDTO.getSkills());
 
                 assessment = assessmentRepository.save(assessment);
 
@@ -329,5 +330,43 @@ public class ModuleService {
 
     private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
         return new AssessmentParticipantDTO(participant.getUser().getUserId(), participant.getRoles());
+    }
+
+    public ModuleWithAssessmentsDTO getModuleWithAssessments(String moduleCode) {
+        Module module = moduleRepository.findByModuleCode(moduleCode)
+                .orElseThrow(() -> new IllegalArgumentException("Module not found with code: " + moduleCode));
+
+        List<Assessment> assessments = assessmentRepository.findByModule(module);
+
+        ModuleWithAssessmentsDTO dto = new ModuleWithAssessmentsDTO();
+        dto.setModuleName(module.getModuleName());
+        dto.setModuleLeader(module.getModuleLeader());
+        dto.setModuleCode(module.getModuleCode());
+        dto.setCredits(module.getCredits());
+        dto.setLevel(module.getLevel());
+        dto.setModuleOutcomes(module.getModuleOutcomes());
+        //dto.setSkills(module.getSkills());
+
+        List<AssessmentDTO> assessmentDTOs = assessments.stream()
+                .map(this::mapToAssessmentDTO)  // Using the new overloaded method
+                .collect(Collectors.toList());
+        dto.setAssessments(assessmentDTOs);
+
+        return dto;
+    }
+
+    // New overloaded method for mapping Assessment to AssessmentDTO
+    private AssessmentDTO mapToAssessmentDTO(Assessment assessment) {
+        AssessmentDTO dto = new AssessmentDTO();
+        dto.setId(assessment.getId());
+        dto.setTitle(assessment.getTitle());
+        dto.setAssessmentCategory(assessment.getAssessmentCategory());
+        dto.setAssessmentWeighting(assessment.getAssessmentWeighting());
+        dto.setPlannedIssueDate(assessment.getPlannedIssueDate());
+        dto.setCourseworkSubmissionDate(assessment.getCourseworkSubmissionDate());
+        dto.setSkills(assessment.getSkills());
+
+        // Map other fields as necessary
+        return dto;
     }
 }

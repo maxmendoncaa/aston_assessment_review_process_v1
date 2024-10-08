@@ -1,5 +1,6 @@
 package com.aston.assessment.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public class AssessmentDTO {
     private String moduleCode;
     private String moduleLeader;
     private String assessmentCategory;
+    private String skills;
     private int assessmentWeighting;
     private LocalDate plannedIssueDate;
     private LocalDate courseworkSubmissionDate;
@@ -20,6 +22,7 @@ public class AssessmentDTO {
 
     // Module Assessment Lead fields
     private String moduleAssessmentLeadSignature;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime moduleAssessmentLeadSignatureDate;
 
     // Internal Moderator fields
@@ -37,6 +40,14 @@ public class AssessmentDTO {
     private LocalDate programmeDirectorSignatureDate;
     // Add this field for participants
     private List<AssessmentParticipantDTO> participants;
+
+    public Set<String> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<String> userRoles) {
+        this.userRoles = userRoles;
+    }
 
 
 }
