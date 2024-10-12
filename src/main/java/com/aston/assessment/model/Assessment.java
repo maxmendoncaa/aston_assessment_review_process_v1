@@ -145,7 +145,7 @@ public class Assessment {
     @Column(nullable = false)
     private LocalDate courseworkSubmissionDate;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "module_id", nullable = false)
     private Module module;
 
@@ -162,16 +162,22 @@ public class Assessment {
     @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL)
     private List<AssessmentParticipant> participants;
 
+    //    @JoinColumn(name = "module_assessment_lead_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "assessment")
 
-    @ManyToOne
-    @JoinColumn(name = "module_assessment_lead_id")
     private ModuleAssessmentLead moduleAssessmentLead;
 
-    @Column(name = "module_assessment_lead_signature")
-    private String moduleAssessmentLeadSignature="Pending";
 
-    @Column(name = "module_assessment_lead_signature_date")
-    private LocalDateTime moduleAssessmentLeadSignatureDate=null;
+
+    //Triggers for flow of assessment review process - Stage1
+    @Column(name="assessment_details_trigger")
+    private String assessmentDetailsTrigger="Not Completed";
+    @Column(name="internal_moderator_details_trigger")
+    private String internalModeratorDetailsTrigger="Not Completed";
+    @Column(name="external_examiner_details_trigger")
+    private String externalExaminerDetailsTrigger="Not Completed";
+    @Column(name="programme_director_details_trigger")
+    private String programmeDirectorDetailsTrigger="Not Completed";
 
 
 
@@ -194,21 +200,23 @@ public class Assessment {
     @Column(name = "moderated_submissions")
     private Integer moderatedSubmissions;
 
+    @Lob
     @Column(name = "teaching_impact_details")
     private String teachingImpactDetails;
 
-    @Column(name = "moderator_signature_date")
-    private LocalDate moderatorSignatureDate;
 
-    @Column(name = "stage2_module_assessment_lead_signature_date")
-    private LocalDate stage2ModuleAssessmentLeadSignatureDate;
-
-    @Column(name = "programme_dir_signature_date")
-    private LocalDate programmeDirSignatureDate;
-
-    @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL)
-    private List<ExternalExaminerResponse> externalExaminerResponses;
+    @OneToOne(mappedBy = "assessment", cascade = CascadeType.ALL)
+    private ExternalExaminerResponse externalExaminerResponses;
 
     @OneToOne(mappedBy = "assessment", cascade = CascadeType.ALL)
     private ProgrammeDirectorConfirmation programmeDirectorConfirmation;
+
+    //Triggers for flow of assessment review process - Stage2
+    @Column(name="internal_moderator_moderation_of_marks_trigger")
+    private String internalModeratorModerationOfMarksTrigger="Not Completed";
+    @Column(name="stage2_module_assessment_lead_comments_trigger")
+    private String stage2ModuleAssessmentLeadCommentsTrigger="Not Completed";
+    @Column(name="stage2_moderator_comments_trigger")
+    private String stage2ModeratorCommentsTrigger="Not Completed";
+
 }

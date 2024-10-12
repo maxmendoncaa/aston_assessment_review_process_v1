@@ -328,8 +328,16 @@ public class ModuleService {
         return dto;
     }
 
+//    private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
+//        return new AssessmentParticipantDTO(participant.getUser().getUserId(), participant.getRoles());
+//    }
     private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
-        return new AssessmentParticipantDTO(participant.getUser().getUserId(), participant.getRoles());
+        return new AssessmentParticipantDTO(
+                participant.getUser().getUserId(),
+                participant.getUser().getFirstName(),
+                participant.getUser().getLastName(),
+                new ArrayList<>(participant.getRoles()) // Convert Set to List
+        );
     }
 
     public ModuleWithAssessmentsDTO getModuleWithAssessments(String moduleCode) {

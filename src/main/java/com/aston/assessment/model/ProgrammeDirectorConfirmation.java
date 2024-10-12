@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -24,13 +25,22 @@ public class ProgrammeDirectorConfirmation {
     @JoinColumn(name = "assessment_id", nullable = false)
     private Assessment assessment;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private Users user;
 
-    @Column(nullable = false)
+    @Column
     private boolean appropriatelyResponded;
 
-    @Column(nullable = false)
-    private LocalDate signatureDate;
+    @Column(name="programme_Director_Confirmation_signature_DateTime")
+    private LocalDateTime programmeDirectorConfirmation_signatureDateTime;
+    @Column(name="programmeDirector_Confirmation_signature")
+    private String programmeDirectorConfirmation_signature="Pending";
+
+    @Column(name="programmeDirectorConfirmation_signatureDateTime_stage2")
+    private LocalDateTime programmeDirectorConfirmation_signatureDateTime_stage2;
+    @Column(name="programmeDirectorConfirmation_signature_stage2")
+    private String programmeDirectorConfirmation_signature_stage2;
+
+
 }

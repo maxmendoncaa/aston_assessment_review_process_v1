@@ -54,6 +54,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -75,21 +76,21 @@ public class InternalModerator {
     @OneToMany(mappedBy = "internalModerator", cascade = CascadeType.ALL)
     private List<Question> questions;
 
+    @Lob
     @Column(name = "general_comment")
     private String generalComment;
 
     @Column(name = "internal_moderator_signature")
-    private String internalModeratorSignature;
+    private String internalModeratorSignature="Pending";
 
-    @Column(name = "internal_moderator_signature_date")
-    private LocalDate internalModeratorSignatureDate;
+    @Column(name = "internal_moderator_signature_date_time")
+    private LocalDateTime internalModeratorSignatureDateTime;
 
-    @Column(name = "response_to_internal_moderator")
-    private String responseToInternalModerator;
+    //stage2
+    @Column(name = "moderator_signature_date")
+    private LocalDateTime moderatorSignatureDateTime;
+    @Lob
+    @Column(name="stage2_moderator_comments")
+    private String stage2_moderatorComments;
 
-    @Column(name = "response_signature")
-    private String responseSignature;
-
-    @Column(name = "response_date")
-    private LocalDate responseDate;
 }

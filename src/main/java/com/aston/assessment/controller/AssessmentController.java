@@ -1,6 +1,7 @@
 package com.aston.assessment.controller;
 
 import com.aston.assessment.DTO.AssessmentDTO;
+import com.aston.assessment.DTO.AssessmentParticipantDTO;
 import com.aston.assessment.DTO.AssessmentUpdateDTO;
 import com.aston.assessment.model.*;
 import com.aston.assessment.service.AssessmentService;
@@ -109,4 +110,11 @@ public class AssessmentController {
                 AssessmentDTO updatedAssessment = assessmentService.updateAssessment(id, assessmentDTO);
                 return ResponseEntity.ok(updatedAssessment);
             }
+
+
+    @GetMapping("/{assessmentId}/participants")
+    public ResponseEntity<List<AssessmentParticipantDTO>> getAssessmentParticipants(@PathVariable Long assessmentId) {
+        List<AssessmentParticipantDTO> participants = assessmentService.getAssessmentParticipants(assessmentId);
+        return ResponseEntity.ok(participants);
+    }
 }

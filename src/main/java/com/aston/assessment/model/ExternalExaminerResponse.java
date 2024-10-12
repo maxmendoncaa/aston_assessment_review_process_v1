@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -20,20 +20,22 @@ public class ExternalExaminerResponse {
     @Column(name="external_examiner_response_id")
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "assessment_id", nullable = false)
     private Assessment assessment;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private Users user;
 
-    @Column(nullable = false)
-    private String comments;
+    @Column(name="external_examiner_comments")
+    private String external_examiner_comments;
 
-    @Column(nullable = false)
+    @Column
     private boolean reviewAssessmentAgain;
 
-    @Column(nullable = false)
-    private LocalDate signatureDate;
+    @Column(name="externalExaminer_signatureDateTime")
+    private LocalDateTime externalExaminer_signatureDateTime;
+    @Column(name="externalExaminer_signature")
+    private String externalExaminer_signature;
 }
