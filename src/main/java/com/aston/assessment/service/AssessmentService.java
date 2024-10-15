@@ -310,8 +310,11 @@ public class AssessmentService {
         //assessment.setModuleCode(updateDTO.getModuleCode());
         assessment.setAssessmentWeighting(updateDTO.getAssessmentWeighting());
         assessment.setAssessmentCategory(updateDTO.getAssessmentCategory());
+        assessment.setPlannedIssueDate(updateDTO.getPlannedIssueDate());
+        assessment.setCourseworkSubmissionDate(updateDTO.getCourseworkSubmissionDate());
         assessment.getModuleAssessmentLead().setModuleAssessmentLeadSignature("Signed");
         assessment.getModuleAssessmentLead().setModuleAssessmentLeadSignatureDateTime(LocalDateTime.now());
+
     }
 
     private void updateInternalModeration(Assessment assessment, AssessmentUpdateDTO updateDTO) {
@@ -464,15 +467,150 @@ public class AssessmentService {
 //        Assessment updatedAssessment = assessmentRepository.save(assessment);
 //        return mapToDTO(updatedAssessment);
 //    }
+
+
+// //Last working code as of 13th October
+//@Transactional
+//public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
+//    Assessment assessment = assessmentRepository.findById(id)
+//            .orElseThrow(() -> new IllegalArgumentException("Assessment not found with id: " + id));
+//
+//    // Update fields based on user roles
+//    Set<String> userRoles = assessmentDTO.getUserRoles();
+//
+//    if (userRoles.contains(AssessmentRoles.MODULE_ASSESSMENT_LEAD.name())) {
+//        if (assessment.getModuleAssessmentLead() == null) {
+//            ModuleAssessmentLead newLead = new ModuleAssessmentLead();
+//            newLead.setAssessment(assessment);
+//            assessment.setModuleAssessmentLead(newLead);
+//        }
+//
+//        ModuleAssessmentLead lead = assessment.getModuleAssessmentLead();
+//        lead.setModuleAssessmentLeadSignature(assessmentDTO.getModuleAssessmentLeadSignature());
+//        lead.setModuleAssessmentLeadSignatureDateTime(assessmentDTO.getModuleAssessmentLeadSignatureDateTime());
+//        lead.setResponseToInternalModerator(assessmentDTO.getResponseToInternalModerator());
+//        lead.setResponseToInternalModeratorDateTime(assessmentDTO.getResponseToInternalModeratorDateTime());
+//        lead.setResponseToExternalExaminer(assessmentDTO.getResponseToExternalExaminer());
+//        lead.setResponseToExternalExaminerDateTime(assessmentDTO.getResponseToExternalExaminerDateTime());
+//        lead.setStage2_assessmentLeadComments(assessmentDTO.getStage2_assessmentLeadComments());
+//
+//        assessment.setSkills(assessmentDTO.getSkills());
+//        assessment.setAssessmentDeadline(assessmentDTO.getAssessmentDeadline());
+//        assessment.setTotalSubmissions(assessmentDTO.getTotalSubmissions());
+//        assessment.setFailedSubmissions(assessmentDTO.getFailedSubmissions());
+//        assessment.setModeratedSubmissions(assessmentDTO.getModeratedSubmissions());
+//        assessment.setTeachingImpactDetails(assessmentDTO.getTeachingImpactDetails());
+//    }
+//
+//    if (userRoles.contains(AssessmentRoles.INTERNAL_MODERATOR.name())) {
+//        InternalModerator moderator = assessment.getInternalModerator();
+//        if (moderator == null) {
+//            moderator = new InternalModerator();
+//            moderator.setAssessment(assessment);
+//            assessment.setInternalModerator(moderator);
+//        }
+//        moderator.setGeneralComment(assessmentDTO.getInternalModeratorComments());
+//        moderator.setInternalModeratorSignature(assessmentDTO.getInternalModeratorSignature());
+//        moderator.setInternalModeratorSignatureDateTime(assessmentDTO.getInternalModeratorSignatureDateTime());
+//        moderator.setStage2_moderatorComments(assessmentDTO.getStage2_moderatorComments());
+//    }
+//
+//    if (userRoles.contains(AssessmentRoles.EXTERNAL_EXAMINER.name())) {
+//        ExternalExaminerResponse response = new ExternalExaminerResponse();
+//        response.setExternal_examiner_comments(assessmentDTO.getExternalExaminerComments());
+//        // Add null check here
+//        String externalExaminerApproval = assessmentDTO.getExternalExaminerApproval();
+//        response.setReviewAssessmentAgain(externalExaminerApproval != null && externalExaminerApproval.equals("NEEDS_REVISION"));
+//
+//        //response.setReviewAssessmentAgain(assessmentDTO.getExternalExaminerApproval().equals("NEEDS_REVISION"));
+//        response.setExternalExaminer_signatureDateTime(assessmentDTO.getExternalExaminerSignatureDateTime());
+//        response.setExternalExaminer_signature(assessmentDTO.getExternalExaminer_signature());
+//        response.setAssessment(assessment);
+////        Users currentUser = getCurrentUser(); // You need to implement this method
+////        response.setUser(currentUser);
+//     //   assessment.getExternalExaminerResponses().add(response);
+//
+//    }
+//
+//    if (userRoles.contains(AssessmentRoles.PROGRAMME_DIRECTOR.name())) {
+//        ProgrammeDirectorConfirmation confirmation = assessment.getProgrammeDirectorConfirmation();
+//        if (confirmation == null) {
+//            confirmation = new ProgrammeDirectorConfirmation();
+//            confirmation.setAssessment(assessment);
+//            assessment.setProgrammeDirectorConfirmation(confirmation);
+//        }
+//        // Add null check here
+//        String programmeDirectorApproval = assessmentDTO.getProgrammeDirectorApproval();
+//        confirmation.setAppropriatelyResponded(programmeDirectorApproval != null && programmeDirectorApproval.equals("APPROVED"));
+//
+//       // confirmation.setAppropriatelyResponded(assessmentDTO.getProgrammeDirectorApproval().equals("APPROVED"));
+//        confirmation.setProgrammeDirectorConfirmation_signatureDateTime(assessmentDTO.getProgrammeDirectorSignatureDateTime());
+//        confirmation.setProgrammeDirectorConfirmation_signature(assessmentDTO.getProgrammeDirectorConfirmation_signature());
+//        confirmation.setProgrammeDirectorConfirmation_signature_stage2(assessmentDTO.getProgrammeDirectorConfirmation_signature_stage2());
+//        confirmation.setProgrammeDirectorConfirmation_signatureDateTime_stage2(assessmentDTO.getProgrammeDirectorConfirmation_signatureDateTime_stage2());
+//    }
+//
+//    assessment.setMarkingCompletedDate(assessmentDTO.getMarkingCompletedDate());
+//    assessment.setModerationCompletedDate(assessmentDTO.getModerationCompletedDate());
+//
+//    // Update triggers
+//    assessment.setAssessmentDetailsTrigger(assessmentDTO.getAssessmentDetailsTrigger());
+//    assessment.setInternalModeratorDetailsTrigger(assessmentDTO.getInternalModeratorDetailsTrigger());
+//    assessment.setExternalExaminerDetailsTrigger(assessmentDTO.getExternalExaminerDetailsTrigger());
+//    assessment.setProgrammeDirectorDetailsTrigger(assessmentDTO.getProgrammeDirectorDetailsTrigger());
+//    assessment.setInternalModeratorModerationOfMarksTrigger(assessmentDTO.getInternalModeratorModerationOfMarksTrigger());
+//    assessment.setStage2ModuleAssessmentLeadCommentsTrigger(assessmentDTO.getStage2ModuleAssessmentLeadCommentsTrigger());
+//    assessment.setStage2ModeratorCommentsTrigger(assessmentDTO.getStage2ModeratorCommentsTrigger());
+//
+//    Assessment updatedAssessment = assessmentRepository.save(assessment);
+//    return mapToDTO(updatedAssessment);
+//}
+//working code ends here
 @Transactional
 public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
     Assessment assessment = assessmentRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Assessment not found with id: " + id));
 
-    // Update fields based on user roles
     Set<String> userRoles = assessmentDTO.getUserRoles();
 
+    // Update common fields
+    assessment.setTitle(assessmentDTO.getTitle());
+    assessment.setAssessmentCategory(assessmentDTO.getAssessmentCategory());
+    assessment.setAssessmentWeighting(assessmentDTO.getAssessmentWeighting());
+    assessment.setPlannedIssueDate(assessmentDTO.getPlannedIssueDate());
+    assessment.setCourseworkSubmissionDate(assessmentDTO.getCourseworkSubmissionDate());
+
+    // MODULE_ASSESSMENT_LEAD updates
     if (userRoles.contains(AssessmentRoles.MODULE_ASSESSMENT_LEAD.name())) {
+        updateModuleAssessmentLeadFields(assessment, assessmentDTO);
+    }
+
+    // INTERNAL_MODERATOR updates
+    if (userRoles.contains(AssessmentRoles.INTERNAL_MODERATOR.name())) {
+        updateInternalModeratorFields(assessment, assessmentDTO);
+    }
+
+    // EXTERNAL_EXAMINER updates
+    if (userRoles.contains(AssessmentRoles.EXTERNAL_EXAMINER.name())) {
+        updateExternalExaminerFields(assessment, assessmentDTO);
+    }
+
+    // PROGRAMME_DIRECTOR updates
+    if (userRoles.contains(AssessmentRoles.PROGRAMME_DIRECTOR.name())) {
+        updateProgrammeDirectorFields(assessment, assessmentDTO);
+    }
+
+    // Update triggers
+    updateTriggers(assessment, assessmentDTO);
+
+    // Save the updated assessment
+    Assessment updatedAssessment = assessmentRepository.save(assessment);
+
+    // Map the updated assessment back to DTO
+    return mapToDTO(updatedAssessment);
+}
+
+    private void updateModuleAssessmentLeadFields(Assessment assessment, AssessmentDTO assessmentDTO) {
         if (assessment.getModuleAssessmentLead() == null) {
             ModuleAssessmentLead newLead = new ModuleAssessmentLead();
             newLead.setAssessment(assessment);
@@ -494,9 +632,11 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
         assessment.setFailedSubmissions(assessmentDTO.getFailedSubmissions());
         assessment.setModeratedSubmissions(assessmentDTO.getModeratedSubmissions());
         assessment.setTeachingImpactDetails(assessmentDTO.getTeachingImpactDetails());
+        assessment.setMarkingCompletedDate(assessmentDTO.getMarkingCompletedDate());
+        assessment.setModerationCompletedDate(assessmentDTO.getModerationCompletedDate());
     }
 
-    if (userRoles.contains(AssessmentRoles.INTERNAL_MODERATOR.name())) {
+    private void updateInternalModeratorFields(Assessment assessment, AssessmentDTO assessmentDTO) {
         InternalModerator moderator = assessment.getInternalModerator();
         if (moderator == null) {
             moderator = new InternalModerator();
@@ -507,58 +647,44 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
         moderator.setInternalModeratorSignature(assessmentDTO.getInternalModeratorSignature());
         moderator.setInternalModeratorSignatureDateTime(assessmentDTO.getInternalModeratorSignatureDateTime());
         moderator.setStage2_moderatorComments(assessmentDTO.getStage2_moderatorComments());
+        moderator.setModeratorSignatureDateTime(assessmentDTO.getModeratorSignatureDateTime());
     }
 
-    if (userRoles.contains(AssessmentRoles.EXTERNAL_EXAMINER.name())) {
+    private void updateExternalExaminerFields(Assessment assessment, AssessmentDTO assessmentDTO) {
         ExternalExaminerResponse response = new ExternalExaminerResponse();
         response.setExternal_examiner_comments(assessmentDTO.getExternalExaminerComments());
-        // Add null check here
         String externalExaminerApproval = assessmentDTO.getExternalExaminerApproval();
         response.setReviewAssessmentAgain(externalExaminerApproval != null && externalExaminerApproval.equals("NEEDS_REVISION"));
-
-        //response.setReviewAssessmentAgain(assessmentDTO.getExternalExaminerApproval().equals("NEEDS_REVISION"));
         response.setExternalExaminer_signatureDateTime(assessmentDTO.getExternalExaminerSignatureDateTime());
         response.setExternalExaminer_signature(assessmentDTO.getExternalExaminer_signature());
-        response.setAssessment(assessment);
-//        Users currentUser = getCurrentUser(); // You need to implement this method
-//        response.setUser(currentUser);
-     //   assessment.getExternalExaminerResponses().add(response);
-
+        //response.setAssessment(assessment);
+       // assessment.setExternalExaminerResponses(response);
     }
 
-    if (userRoles.contains(AssessmentRoles.PROGRAMME_DIRECTOR.name())) {
+    private void updateProgrammeDirectorFields(Assessment assessment, AssessmentDTO assessmentDTO) {
         ProgrammeDirectorConfirmation confirmation = assessment.getProgrammeDirectorConfirmation();
         if (confirmation == null) {
             confirmation = new ProgrammeDirectorConfirmation();
             confirmation.setAssessment(assessment);
             assessment.setProgrammeDirectorConfirmation(confirmation);
         }
-        // Add null check here
         String programmeDirectorApproval = assessmentDTO.getProgrammeDirectorApproval();
         confirmation.setAppropriatelyResponded(programmeDirectorApproval != null && programmeDirectorApproval.equals("APPROVED"));
-
-       // confirmation.setAppropriatelyResponded(assessmentDTO.getProgrammeDirectorApproval().equals("APPROVED"));
         confirmation.setProgrammeDirectorConfirmation_signatureDateTime(assessmentDTO.getProgrammeDirectorSignatureDateTime());
         confirmation.setProgrammeDirectorConfirmation_signature(assessmentDTO.getProgrammeDirectorConfirmation_signature());
         confirmation.setProgrammeDirectorConfirmation_signature_stage2(assessmentDTO.getProgrammeDirectorConfirmation_signature_stage2());
         confirmation.setProgrammeDirectorConfirmation_signatureDateTime_stage2(assessmentDTO.getProgrammeDirectorConfirmation_signatureDateTime_stage2());
     }
 
-    assessment.setMarkingCompletedDate(assessmentDTO.getMarkingCompletedDate());
-    assessment.setModerationCompletedDate(assessmentDTO.getModerationCompletedDate());
-
-    // Update triggers
-    assessment.setAssessmentDetailsTrigger(assessmentDTO.getAssessmentDetailsTrigger());
-    assessment.setInternalModeratorDetailsTrigger(assessmentDTO.getInternalModeratorDetailsTrigger());
-    assessment.setExternalExaminerDetailsTrigger(assessmentDTO.getExternalExaminerDetailsTrigger());
-    assessment.setProgrammeDirectorDetailsTrigger(assessmentDTO.getProgrammeDirectorDetailsTrigger());
-    assessment.setInternalModeratorModerationOfMarksTrigger(assessmentDTO.getInternalModeratorModerationOfMarksTrigger());
-    assessment.setStage2ModuleAssessmentLeadCommentsTrigger(assessmentDTO.getStage2ModuleAssessmentLeadCommentsTrigger());
-    assessment.setStage2ModeratorCommentsTrigger(assessmentDTO.getStage2ModeratorCommentsTrigger());
-
-    Assessment updatedAssessment = assessmentRepository.save(assessment);
-    return mapToDTO(updatedAssessment);
-}
+    private void updateTriggers(Assessment assessment, AssessmentDTO assessmentDTO) {
+        assessment.setAssessmentDetailsTrigger(assessmentDTO.getAssessmentDetailsTrigger());
+        assessment.setInternalModeratorDetailsTrigger(assessmentDTO.getInternalModeratorDetailsTrigger());
+        assessment.setExternalExaminerDetailsTrigger(assessmentDTO.getExternalExaminerDetailsTrigger());
+        assessment.setProgrammeDirectorDetailsTrigger(assessmentDTO.getProgrammeDirectorDetailsTrigger());
+        assessment.setInternalModeratorModerationOfMarksTrigger(assessmentDTO.getInternalModeratorModerationOfMarksTrigger());
+        assessment.setStage2ModuleAssessmentLeadCommentsTrigger(assessmentDTO.getStage2ModuleAssessmentLeadCommentsTrigger());
+        assessment.setStage2ModeratorCommentsTrigger(assessmentDTO.getStage2ModeratorCommentsTrigger());
+    }
 
 
 //    private AssessmentDTO mapToDTO(Assessment assessment) {
