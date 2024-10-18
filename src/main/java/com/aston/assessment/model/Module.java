@@ -25,7 +25,7 @@ public class Module {
     @Column(name = "module_name")
     private String moduleName;
 
-    @Column(name = "module_code", unique = true)
+    @Column(name = "module_code")
     private String moduleCode;
 
     @Column(name = "level")

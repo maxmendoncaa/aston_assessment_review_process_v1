@@ -117,4 +117,6 @@ public class AssessmentController {
         List<AssessmentParticipantDTO> participants = assessmentService.getAssessmentParticipants(assessmentId);
         return ResponseEntity.ok(participants);
     }
+
+
 }

@@ -51,10 +51,10 @@ public class ModuleService {
         return moduleRepository.save(module);
     }
 
-    @Transactional
-    public void deleteModule(Long id) {
-        moduleRepository.deleteById(id);
-    }
+//    @Transactional
+//    public void deleteModule(Long id) {
+//        moduleRepository.deleteById(id);
+//    }
 
     public List<Assessment> getModuleAssessments(Long moduleId) {
         return assessmentRepository.findByModuleId(moduleId);
@@ -328,7 +328,7 @@ public class ModuleService {
         return dto;
     }
 
-//    private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
+    //    private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
 //        return new AssessmentParticipantDTO(participant.getUser().getUserId(), participant.getRoles());
 //    }
     private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
@@ -376,5 +376,145 @@ public class ModuleService {
 
         // Map other fields as necessary
         return dto;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //manage modules
+
+    @Transactional
+    public Module updateModule(Long id, Module updatedModule) {
+        Module module = moduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        module.setModuleName(updatedModule.getModuleName());
+        module.setModuleCode(updatedModule.getModuleCode());
+        module.setCredits(updatedModule.getCredits());
+        module.setLevel(updatedModule.getLevel());
+        module.setModuleOutcomes(updatedModule.getModuleOutcomes());
+
+        // Update assessments
+        for (Assessment updatedAssessment : updatedModule.getAssessments()) {
+            Assessment assessment = module.getAssessments().stream()
+                    .filter(a -> a.getId().equals(updatedAssessment.getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Assessment not found"));
+
+            assessment.setAssessmentCategory(updatedAssessment.getAssessmentCategory());
+            assessment.setTitle(updatedAssessment.getTitle());
+            assessment.setAssessmentWeighting(updatedAssessment.getAssessmentWeighting());
+            assessment.setPlannedIssueDate(updatedAssessment.getPlannedIssueDate());
+            assessment.setCourseworkSubmissionDate(updatedAssessment.getCourseworkSubmissionDate());
+
+            // Update participants
+            for (AssessmentParticipant updatedParticipant : updatedAssessment.getParticipants()) {
+                AssessmentParticipant participant = assessment.getParticipants().stream()
+                        .filter(p -> p.getId().equals(updatedParticipant.getId()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Participant not found"));
+
+                participant.setUser(updatedParticipant.getUser());
+                participant.setRoles(updatedParticipant.getRoles());
+            }
+        }
+
+        return moduleRepository.save(module);
+    }
+
+    @Transactional
+    public void deleteModule(Long id) {
+        moduleRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAssessment(Long moduleId, Long assessmentId) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        module.getAssessments().removeIf(assessment -> assessment.getId().equals(assessmentId));
+        moduleRepository.save(module);
+    }
+
+
+
+    @Transactional
+    public void deleteParticipant(Long moduleId, Long assessmentId, Long participantId) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        Assessment assessment = module.getAssessments().stream()
+                .filter(a -> a.getId().equals(assessmentId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Assessment not found"));
+
+        assessment.getParticipants().removeIf(participant -> participant.getId().equals(participantId));
+        moduleRepository.save(module);
+    }
+
+    @Transactional
+    public void updateParticipantRoles(Long moduleId, Long assessmentId, Long participantId, Set<AssessmentRoles> roles) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        Assessment assessment = module.getAssessments().stream()
+                .filter(a -> a.getId().equals(assessmentId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Assessment not found"));
+
+        AssessmentParticipant participant = assessment.getParticipants().stream()
+                .filter(p -> p.getUser().getUserId().equals(participantId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Participant not found"));
+
+        participant.setRoles(roles);
+        moduleRepository.save(module);
+    }
+
+    // Add this method to check if a user is an assessment lead for a module
+    public boolean isUserAssessmentLead(Long moduleId, String userEmail) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        return module.getAssessments().stream()
+                .anyMatch(assessment -> assessment.getParticipants().stream()
+                        .anyMatch(participant ->
+                                participant.getUser().getEmail().equals(userEmail) &&
+                                        participant.getRoles().contains(AssessmentRoles.MODULE_ASSESSMENT_LEAD)
+                        )
+                );
+    }
+
+    @Transactional
+    public AssessmentParticipantDTO addParticipantToAssessment(Long moduleId, Long assessmentId, AssessmentParticipantDTO participantDTO) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+
+        Assessment assessment = module.getAssessments().stream()
+                .filter(a -> a.getId().equals(assessmentId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Assessment not found"));
+
+        Users user = userRepository.findById(participantDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        AssessmentParticipant participant = new AssessmentParticipant();
+        participant.setAssessment(assessment);
+        participant.setUser(user);
+        participant.setRoles(new HashSet<>(participantDTO.getRoles()));
+
+        assessment.getParticipants().add(participant);
+        moduleRepository.save(module);
+
+        return mapToAssessmentParticipantDTO(participant);
     }
 }

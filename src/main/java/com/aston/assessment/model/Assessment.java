@@ -174,8 +174,12 @@ public class Assessment {
     private String assessmentDetailsTrigger="Not Completed";
     @Column(name="internal_moderator_details_trigger")
     private String internalModeratorDetailsTrigger="Not Completed";
+    @Column(name="response_to_internal_moderator_trigger")
+    private String responseToInternalModeratorTrigger="Not Completed";
     @Column(name="external_examiner_details_trigger")
     private String externalExaminerDetailsTrigger="Not Completed";
+    @Column(name="response_to_external_examiner_trigger")
+    private String responseToExternalExaminerTrigger="Not Completed";
     @Column(name="programme_director_details_trigger")
     private String programmeDirectorDetailsTrigger="Not Completed";
 

@@ -307,7 +307,7 @@ public class AssessmentService {
 
     private void updateAssessmentDetails(Assessment assessment, AssessmentUpdateDTO updateDTO) {
         assessment.setTitle(updateDTO.getTitle());
-        //assessment.setModuleCode(updateDTO.getModuleCode());
+       // assessment.setModuleCode(updateDTO.getModuleCode());
         assessment.setAssessmentWeighting(updateDTO.getAssessmentWeighting());
         assessment.setAssessmentCategory(updateDTO.getAssessmentCategory());
         assessment.setPlannedIssueDate(updateDTO.getPlannedIssueDate());
@@ -679,99 +679,15 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
     private void updateTriggers(Assessment assessment, AssessmentDTO assessmentDTO) {
         assessment.setAssessmentDetailsTrigger(assessmentDTO.getAssessmentDetailsTrigger());
         assessment.setInternalModeratorDetailsTrigger(assessmentDTO.getInternalModeratorDetailsTrigger());
+        assessment.setResponseToInternalModeratorTrigger(assessmentDTO.getResponseToInternalModeratorTrigger());
         assessment.setExternalExaminerDetailsTrigger(assessmentDTO.getExternalExaminerDetailsTrigger());
+        assessment.setResponseToExternalExaminerTrigger(assessmentDTO.getResponseToExternalExaminerTrigger());
         assessment.setProgrammeDirectorDetailsTrigger(assessmentDTO.getProgrammeDirectorDetailsTrigger());
         assessment.setInternalModeratorModerationOfMarksTrigger(assessmentDTO.getInternalModeratorModerationOfMarksTrigger());
         assessment.setStage2ModuleAssessmentLeadCommentsTrigger(assessmentDTO.getStage2ModuleAssessmentLeadCommentsTrigger());
         assessment.setStage2ModeratorCommentsTrigger(assessmentDTO.getStage2ModeratorCommentsTrigger());
     }
 
-
-//    private AssessmentDTO mapToDTO(Assessment assessment) {
-//        AssessmentDTO dto = new AssessmentDTO();
-//        dto.setId(assessment.getId());
-//        dto.setTitle(assessment.getTitle());
-//        dto.setAssessmentCategory(assessment.getAssessmentCategory());
-//        dto.setAssessmentWeighting(assessment.getAssessmentWeighting());
-//        dto.setPlannedIssueDate(assessment.getPlannedIssueDate());
-//        dto.setCourseworkSubmissionDate(assessment.getCourseworkSubmissionDate());
-//        dto.setSkills(assessment.getSkills());
-//
-//        if (assessment.getModule() != null) {
-//            dto.setModuleCode(assessment.getModule().getModuleCode());
-//            dto.setModuleLeader(assessment.getModule().getModuleLeader());
-//        }
-//
-//        // Module Assessment Lead fields
-//        if (assessment.getModuleAssessmentLead() != null) {
-//            dto.setModuleAssessmentLeadSignature(assessment.getModuleAssessmentLead().getModuleAssessmentLeadSignature());
-//            dto.setModuleAssessmentLeadSignatureDateTime(assessment.getModuleAssessmentLead().getModuleAssessmentLeadSignatureDateTime());
-//            dto.setResponseToInternalModerator(assessment.getModuleAssessmentLead().getResponseToInternalModerator());
-//            dto.setResponseToInternalModeratorDateTime(assessment.getModuleAssessmentLead().getResponseToInternalModeratorDateTime());
-//            dto.setResponseToExternalExaminer(assessment.getModuleAssessmentLead().getResponseToExternalExaminer());
-//            dto.setResponseToExternalExaminerDateTime(assessment.getModuleAssessmentLead().getResponseToExternalExaminerDateTime());
-//            dto.setStage2_assessmentLeadComments(assessment.getModuleAssessmentLead().getStage2_assessmentLeadComments());
-//        }
-//
-//        if (assessment.getInternalModerator() != null) {
-//            dto.setInternalModeratorComments(assessment.getInternalModerator().getGeneralComment());
-//            dto.setInternalModeratorSignature(assessment.getInternalModerator().getInternalModeratorSignature());
-//            dto.setInternalModeratorSignatureDateTime(assessment.getInternalModerator().getInternalModeratorSignatureDateTime());
-//            dto.setStage2_moderatorComments(assessment.getInternalModerator().getStage2_moderatorComments());
-//        }
-//        // External Examiner fields
-//        if (!assessment.getExternalExaminerResponses().isEmpty()) {
-//            ExternalExaminerResponse latestResponse = assessment.getExternalExaminerResponses().get(assessment.getExternalExaminerResponses().size() - 1);
-//            dto.setExternalExaminerComments(latestResponse.getExternal_examiner_comments());
-//            dto.setExternalExaminerApproval(latestResponse.isReviewAssessmentAgain() ? "NEEDS_REVISION" : "APPROVED");
-//            dto.setExternalExaminerSignatureDateTime(latestResponse.getExternalExaminer_signatureDateTime());
-//            dto.setExternalExaminer_signature(latestResponse.getExternalExaminer_signature());
-//        }
-//
-//        // Programme Director fields
-//        if (assessment.getProgrammeDirectorConfirmation() != null) {
-//            ProgrammeDirectorConfirmation confirmation = assessment.getProgrammeDirectorConfirmation();
-//            dto.setProgrammeDirectorApproval(confirmation.isAppropriatelyResponded() ? "APPROVED" : "NEEDS_REVISION");
-//            dto.setProgrammeDirectorSignatureDateTime(confirmation.getProgrammeDirectorConfirmation_signatureDateTime());
-//            dto.setProgrammeDirectorConfirmation_signature(confirmation.getProgrammeDirectorConfirmation_signature());
-//            dto.setProgrammeDirectorConfirmation_signature_stage2(confirmation.getProgrammeDirectorConfirmation_signature_stage2());
-//            dto.setProgrammeDirectorConfirmation_signatureDateTime_stage2(confirmation.getProgrammeDirectorConfirmation_signatureDateTime_stage2());
-//        }
-//
-//        // Stage 2 fields
-//        dto.setAssessmentDeadline(assessment.getAssessmentDeadline());
-//        dto.setTotalSubmissions(assessment.getTotalSubmissions());
-//        dto.setFailedSubmissions(assessment.getFailedSubmissions());
-//        dto.setModeratedSubmissions(assessment.getModeratedSubmissions());
-//        dto.setTeachingImpactDetails(assessment.getTeachingImpactDetails());
-//
-//        dto.setMarkingCompletedDate(assessment.getMarkingCompletedDate());
-//        dto.setModerationCompletedDate(assessment.getModerationCompletedDate());
-//        dto.setModeratorSignatureDateTime(assessment.getInternalModerator().getModeratorSignatureDateTime());
-//        dto.setStage2ModuleAssessmentLeadSignatureDateTime(assessment.getModuleAssessmentLead().getStage2ModuleAssessmentLeadSignatureDateTime());
-//
-//        // Triggers
-//        dto.setAssessmentDetailsTrigger(assessment.getAssessmentDetailsTrigger());
-//        dto.setInternalModeratorDetailsTrigger(assessment.getInternalModeratorDetailsTrigger());
-//        dto.setExternalExaminerDetailsTrigger(assessment.getExternalExaminerDetailsTrigger());
-//        dto.setProgrammeDirectorDetailsTrigger(assessment.getProgrammeDirectorDetailsTrigger());
-//        dto.setInternalModeratorModerationOfMarksTrigger(assessment.getInternalModeratorModerationOfMarksTrigger());
-//        dto.setStage2ModuleAssessmentLeadCommentsTrigger(assessment.getStage2ModuleAssessmentLeadCommentsTrigger());
-//        dto.setStage2ModeratorCommentsTrigger(assessment.getStage2ModeratorCommentsTrigger());
-//
-//        // Map other fields...
-//
-//        dto.setUserRoles(assessment.getParticipants().stream()
-//                .flatMap(participant -> participant.getRoles().stream())
-//                .map(AssessmentRoles::name)
-//                .collect(Collectors.toSet()));
-//        // Set participants
-//        dto.setParticipants(assessment.getParticipants().stream()
-//                .map(this::mapToParticipantDTO)
-//                .collect(Collectors.toList()));
-//
-//        return dto;
-//    }
 private AssessmentDTO mapToDTO(Assessment assessment) {
     AssessmentDTO dto = new AssessmentDTO();
 
@@ -841,7 +757,9 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
     // Triggers
     dto.setAssessmentDetailsTrigger(assessment.getAssessmentDetailsTrigger());
     dto.setInternalModeratorDetailsTrigger(assessment.getInternalModeratorDetailsTrigger());
+    dto.setResponseToInternalModeratorTrigger(assessment.getResponseToInternalModeratorTrigger());
     dto.setExternalExaminerDetailsTrigger(assessment.getExternalExaminerDetailsTrigger());
+    dto.setResponseToExternalExaminerTrigger(assessment.getResponseToExternalExaminerTrigger());
     dto.setProgrammeDirectorDetailsTrigger(assessment.getProgrammeDirectorDetailsTrigger());
     dto.setInternalModeratorModerationOfMarksTrigger(assessment.getInternalModeratorModerationOfMarksTrigger());
     dto.setStage2ModuleAssessmentLeadCommentsTrigger(assessment.getStage2ModuleAssessmentLeadCommentsTrigger());
@@ -868,12 +786,12 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
                 new ArrayList<>(participant.getRoles())
         );
     }
-    public List<AssessmentParticipantDTO> getAssessmentParticipants(Long assessmentId) {
-        List<AssessmentParticipant> participants = participantRepository.findByAssessmentId(assessmentId);
-        return participants.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
+//    public List<AssessmentParticipantDTO> getAssessmentParticipants(Long assessmentId) {
+//        List<AssessmentParticipant> participants = participantRepository.findByAssessmentId(assessmentId);
+//        return participants.stream()
+//                .map(this::mapToDTO)
+//                .collect(Collectors.toList());
+//    }
 
     private AssessmentParticipantDTO mapToDTO(AssessmentParticipant participant) {
         return new AssessmentParticipantDTO(
@@ -881,6 +799,25 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
                 participant.getUser().getFirstName(),
                 participant.getUser().getLastName(),
                 new ArrayList<>(participant.getRoles()) // Convert Set to List
+        );
+    }
+
+
+    public List<AssessmentParticipantDTO> getAssessmentParticipants(Long assessmentId) {
+        Assessment assessment = assessmentRepository.findById(assessmentId)
+                .orElseThrow(() -> new RuntimeException("Assessment not found"));
+
+        return assessment.getParticipants().stream()
+                .map(this::mapToAssessmentParticipantDTO)
+                .collect(Collectors.toList());
+    }
+
+    private AssessmentParticipantDTO mapToAssessmentParticipantDTO(AssessmentParticipant participant) {
+        return new AssessmentParticipantDTO(
+                participant.getUser().getUserId(),
+                participant.getUser().getFirstName(),
+                participant.getUser().getLastName(),
+                new ArrayList<>(participant.getRoles())
         );
     }
 

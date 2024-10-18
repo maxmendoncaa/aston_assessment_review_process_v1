@@ -83,7 +83,9 @@ public class AssessmentDTO {
 
     private String assessmentDetailsTrigger="Not Completed";
     private String internalModeratorDetailsTrigger="Not Completed";
+    private String responseToInternalModeratorTrigger="Not Completed";
     private String externalExaminerDetailsTrigger="Not Completed";
+    private String responseToExternalExaminerTrigger="Not Completed";
     private String programmeDirectorDetailsTrigger="Not Completed";
 
     //Triggers for flow of assessment review process - Stage2

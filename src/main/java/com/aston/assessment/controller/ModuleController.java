@@ -2,6 +2,7 @@ package com.aston.assessment.controller;
 
 import com.aston.assessment.DTO.AssessmentDTO;
 import com.aston.assessment.DTO.ModuleWithAssessmentsDTO;
+import com.aston.assessment.model.AssessmentRoles;
 import com.aston.assessment.model.Module;
 import com.aston.assessment.model.Assessment;
 import com.aston.assessment.model.Users;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/modules")
@@ -82,19 +84,19 @@ public class ModuleController {
         Users user = (Users) authentication.getPrincipal();
         return ResponseEntity.ok(moduleService.getModulesForUser(user.getUserId()));
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<Module> updateModule(@PathVariable Long id, @RequestBody Module module) {
-        if (!id.equals(module.getId())) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(moduleService.updateModule(module));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteModule(@PathVariable Long id) {
-        moduleService.deleteModule(id);
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Module> updateModule(@PathVariable Long id, @RequestBody Module module) {
+//        if (!id.equals(module.getId())) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        return ResponseEntity.ok(moduleService.updateModule(module));
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteModule(@PathVariable Long id) {
+//        moduleService.deleteModule(id);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/{id}/assessments")
     public ResponseEntity<List<Assessment>> getModuleAssessments(@PathVariable Long id) {
@@ -131,5 +133,49 @@ public class ModuleController {
     public ResponseEntity<ModuleWithAssessmentsDTO> getModuleWithAssessments(@PathVariable String moduleCode) {
         ModuleWithAssessmentsDTO moduleWithAssessments = moduleService.getModuleWithAssessments(moduleCode);
         return ResponseEntity.ok(moduleWithAssessments);
+    }
+
+
+
+
+//manage modules
+@PutMapping("/{id}")
+public ResponseEntity<Module> updateModule(@PathVariable Long id, @RequestBody Module module) {
+    return ResponseEntity.ok(moduleService.updateModule(id, module));
+}
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
+        moduleService.deleteModule(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{moduleId}/assessments/{assessmentId}")
+    public ResponseEntity<Void> deleteAssessment(@PathVariable Long moduleId, @PathVariable Long assessmentId) {
+        moduleService.deleteAssessment(moduleId, assessmentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{moduleId}/assessments/{assessmentId}/participants/{participantId}")
+    public ResponseEntity<Void> deleteParticipant(@PathVariable Long moduleId, @PathVariable Long assessmentId, @PathVariable Long participantId) {
+        moduleService.deleteParticipant(moduleId, assessmentId, participantId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{moduleId}/assessments/{assessmentId}/participants/{participantId}")
+    public ResponseEntity<?> updateParticipantRoles(@PathVariable Long moduleId, @PathVariable Long assessmentId, @PathVariable Long participantId, @RequestBody Set<AssessmentRoles> roles) {
+        try {
+            moduleService.updateParticipantRoles(moduleId, assessmentId, participantId, roles);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/is-assessment-lead")
+    public ResponseEntity<Boolean> isAssessmentLead(@PathVariable Long id, Principal principal) {
+        String userEmail = principal.getName();
+        boolean isLead = moduleService.isUserAssessmentLead(id, userEmail);
+        return ResponseEntity.ok(isLead);
     }
 }
