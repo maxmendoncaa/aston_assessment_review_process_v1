@@ -73,9 +73,7 @@ public class InternalModerator {
     @JoinColumn(name = "assessment_id")
     private Assessment assessment;
 
-    @OneToMany(mappedBy = "internalModerator", cascade = CascadeType.ALL)
-    private List<Question> questions;
-
+    
     @Lob
     @Column(name = "general_comment")
     private String generalComment;

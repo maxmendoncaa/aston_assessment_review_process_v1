@@ -3,6 +3,7 @@ package com.aston.assessment.service;
 import com.aston.assessment.DTO.AssessmentDTO;
 import com.aston.assessment.DTO.AssessmentParticipantDTO;
 import com.aston.assessment.DTO.AssessmentUpdateDTO;
+import com.aston.assessment.DTO.QuestionDTO;
 import com.aston.assessment.model.*;
 import com.aston.assessment.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,6 +286,10 @@ public class AssessmentService {
                 .orElseThrow(() -> new RuntimeException("User is not a participant of this assessment"));
 
         updateAssessmentBasedOnRoles(assessment, updateDTO, participant.getRoles());
+
+
+
+
 
         Assessment savedAssessment = assessmentRepository.save(assessment);
         return mapToAssessmentDTO(savedAssessment, participant.getRoles());
@@ -573,6 +578,11 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
 
     Set<String> userRoles = assessmentDTO.getUserRoles();
 
+    // Update questions
+    if (assessmentDTO.getQuestions() != null) {
+        updateQuestions(assessment, assessmentDTO.getQuestions());
+    }
+
     // Update common fields
     assessment.setTitle(assessmentDTO.getTitle());
     assessment.setAssessmentCategory(assessmentDTO.getAssessmentCategory());
@@ -609,6 +619,34 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
     // Map the updated assessment back to DTO
     return mapToDTO(updatedAssessment);
 }
+    private void updateQuestions(Assessment assessment, List<QuestionDTO> questionDTOs) {
+        // Remove questions that are not in the DTO
+        assessment.getQuestions().removeIf(question ->
+                questionDTOs.stream().noneMatch(dto -> dto.getId() != null && dto.getId().equals(question.getId())));
+
+        // Update existing questions and add new ones
+        for (QuestionDTO dto : questionDTOs) {
+            if (dto.getId() != null) {
+                // Update existing question
+                assessment.getQuestions().stream()
+                        .filter(q -> q.getId().equals(dto.getId()))
+                        .findFirst()
+                        .ifPresent(q -> updateQuestionFromDTO(q, dto));
+            } else {
+                // Add new question
+                Question newQuestion = new Question();
+                updateQuestionFromDTO(newQuestion, dto);
+                newQuestion.setAssessment(assessment);
+                assessment.getQuestions().add(newQuestion);
+            }
+        }
+    }
+
+    private void updateQuestionFromDTO(Question question, QuestionDTO dto) {
+        question.setQuestionText(dto.getQuestionText());
+        question.setYesNoAnswer(dto.isYesNoAnswer());
+        question.setComment(dto.getComment());
+    }
 
     private void updateModuleAssessmentLeadFields(Assessment assessment, AssessmentDTO assessmentDTO) {
         if (assessment.getModuleAssessmentLead() == null) {
@@ -625,6 +663,7 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
         lead.setResponseToExternalExaminer(assessmentDTO.getResponseToExternalExaminer());
         lead.setResponseToExternalExaminerDateTime(assessmentDTO.getResponseToExternalExaminerDateTime());
         lead.setStage2_assessmentLeadComments(assessmentDTO.getStage2_assessmentLeadComments());
+        lead.setStage2ModuleAssessmentLeadSignatureDateTime(assessmentDTO.getStage2ModuleAssessmentLeadSignatureDateTime());
 
         assessment.setSkills(assessmentDTO.getSkills());
         assessment.setAssessmentDeadline(assessmentDTO.getAssessmentDeadline());
@@ -651,14 +690,17 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
     }
 
     private void updateExternalExaminerFields(Assessment assessment, AssessmentDTO assessmentDTO) {
-        ExternalExaminerResponse response = new ExternalExaminerResponse();
+        ExternalExaminerResponse response = assessment.getExternalExaminerResponses();
+        if (response == null) {
+            response = new ExternalExaminerResponse();
+            assessment.setExternalExaminerResponses(response);
+            response.setAssessment(assessment);
+        }
         response.setExternal_examiner_comments(assessmentDTO.getExternalExaminerComments());
         String externalExaminerApproval = assessmentDTO.getExternalExaminerApproval();
         response.setReviewAssessmentAgain(externalExaminerApproval != null && externalExaminerApproval.equals("NEEDS_REVISION"));
         response.setExternalExaminer_signatureDateTime(assessmentDTO.getExternalExaminerSignatureDateTime());
         response.setExternalExaminer_signature(assessmentDTO.getExternalExaminer_signature());
-        //response.setAssessment(assessment);
-       // assessment.setExternalExaminerResponses(response);
     }
 
     private void updateProgrammeDirectorFields(Assessment assessment, AssessmentDTO assessmentDTO) {
@@ -698,6 +740,12 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
     dto.setAssessmentWeighting(assessment.getAssessmentWeighting());
     dto.setPlannedIssueDate(assessment.getPlannedIssueDate());
     dto.setCourseworkSubmissionDate(assessment.getCourseworkSubmissionDate());
+    // Map questions
+    if (assessment.getQuestions() != null) {
+        dto.setQuestions(assessment.getQuestions().stream()
+                .map(this::mapToQuestionDTO)
+                .collect(Collectors.toList()));
+    }
 
     if (assessment.getModule() != null) {
         dto.setModuleCode(assessment.getModule().getModuleCode());
@@ -714,6 +762,7 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
         dto.setResponseToExternalExaminer(lead.getResponseToExternalExaminer());
         dto.setResponseToExternalExaminerDateTime(lead.getResponseToExternalExaminerDateTime());
         dto.setStage2_assessmentLeadComments(lead.getStage2_assessmentLeadComments());
+        dto.setStage2ModuleAssessmentLeadSignatureDateTime(lead.getModuleAssessmentLeadSignatureDateTime());
     }
 
     // Handle InternalModerator fields
@@ -778,6 +827,15 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
 
     return dto;
 }
+    private QuestionDTO mapToQuestionDTO(Question question) {
+        QuestionDTO dto = new QuestionDTO();
+        dto.setId(question.getId());
+        dto.setQuestionText(question.getQuestionText());
+        dto.setYesNoAnswer(question.isYesNoAnswer());
+        dto.setComment(question.getComment());
+        return dto;
+    }
+
     private AssessmentParticipantDTO mapToParticipantDTO(AssessmentParticipant participant) {
         return new AssessmentParticipantDTO(
                 participant.getUser().getUserId(),

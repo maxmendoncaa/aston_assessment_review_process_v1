@@ -45,6 +45,7 @@ public class SecurityConfiguration {
             "/swagger-ui.html",
             "/login",
             "api/v1/users/all",
+            "api/v1/email/**",
            // "/dashboard",
 
             "api/auth/login"

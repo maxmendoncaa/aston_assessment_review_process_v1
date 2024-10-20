@@ -15,22 +15,22 @@ import lombok.NoArgsConstructor;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="question_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "comment")
+    private String comment;
+
+    @Column(name = "question_text")
     private String questionText;
 
-    @Column(nullable = false)
+    @Column(name = "yes_no_answer")
     private boolean yesNoAnswer;
 
-    @Column
-    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "assessment_id")
     private Assessment assessment;
 
-    @ManyToOne
-    @JoinColumn(name = "internal_moderator_id")
-    private InternalModerator internalModerator;
+
 }

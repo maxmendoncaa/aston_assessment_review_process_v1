@@ -113,6 +113,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -156,8 +157,8 @@ public class Assessment {
     @OneToOne(mappedBy = "assessment", cascade = CascadeType.ALL)
     private InternalModerator internalModerator;
 
-    @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL)
     private List<AssessmentParticipant> participants;
