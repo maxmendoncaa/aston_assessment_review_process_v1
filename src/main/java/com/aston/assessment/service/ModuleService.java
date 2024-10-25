@@ -170,9 +170,9 @@ public class ModuleService {
             throw new IllegalArgumentException("All required fields must be provided");
         }
 
-        if (moduleRepository.existsByModuleCode(moduleDTO.getModuleCode())) {
-            throw new IllegalArgumentException("A module with this code already exists");
-        }
+//        if (moduleRepository.existsByModuleCode(moduleDTO.getModuleCode())) {
+//            throw new IllegalArgumentException("A module with this code already exists");
+//        }
 
         Module module = new Module();
         module.setModuleName(moduleDTO.getModuleName());
@@ -215,72 +215,7 @@ public class ModuleService {
 
         return module;
     }
-//    @Transactional
-//    public Module createModuleWithAssessments(ModuleWithAssessmentsDTO moduleDTO, Long userId) {
-//        Users user = userRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        if (moduleDTO.getModuleName() == null || moduleDTO.getModuleCode() == null ||
-//                moduleDTO.getCredits() == 0 || moduleDTO.getLevel() == 0) {
-//            throw new IllegalArgumentException("All required fields must be provided");
-//        }
-//
-//        if (moduleRepository.existsByModuleCode(moduleDTO.getModuleCode())) {
-//            throw new IllegalArgumentException("A module with this code already exists");
-//        }
-//
-//        Module module = new Module();
-//        module.setModuleName(moduleDTO.getModuleName());
-//        module.setModuleCode(moduleDTO.getModuleCode());
-//        module.setCredits(moduleDTO.getCredits());
-//        module.setLevel(moduleDTO.getLevel());
-//        module.setModuleOutcomes(moduleDTO.getModuleOutcomes());
-//        module.setModuleLeader(user.getFirstName() + " " + user.getLastName());
-//
-//        module = moduleRepository.save(module);
-//
-//        if (moduleDTO.getAssessments() != null) {
-//            for (AssessmentDTO assessmentDTO : moduleDTO.getAssessments()) {
-//                Assessment assessment = new Assessment();
-//                assessment.setAssessmentCategory(assessmentDTO.getAssessmentCategory());
-//                assessment.setTitle(assessmentDTO.getTitle());
-//                assessment.setAssessmentWeighting(assessmentDTO.getAssessmentWeighting());
-//                assessment.setPlannedIssueDate(assessmentDTO.getPlannedIssueDate());
-//                assessment.setCourseworkSubmissionDate(assessmentDTO.getCourseworkSubmissionDate());
-//                assessment.setModule(module);
-//
-//                assessment = assessmentRepository.save(assessment);
-//
-//                if (assessmentDTO.getParticipants() != null) {
-//                    Map<Long, AssessmentParticipant> participantMap = new HashMap<>();
-//
-//                    for (AssessmentParticipantDTO participantDTO : assessmentDTO.getParticipants()) {
-//                        Users participantUser = userRepository.findById(participantDTO.getUserId())
-//                                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//                        Assessment finalAssessment = assessment;
-//                        AssessmentParticipant participant = participantMap.computeIfAbsent(
-//                                participantUser.getUserId(),
-//                                k -> {
-//                                    AssessmentParticipant newParticipant = new AssessmentParticipant();
-//                                    newParticipant.setAssessment(finalAssessment);
-//                                    newParticipant.setUser(participantUser);
-//                                    newParticipant.setRoles(new HashSet<>());
-//                                    return newParticipant;
-//                                }
-//                        );
-//
-//                        participant.getRoles().addAll(participantDTO.getRoles());
-//                    }
-//
-//                    // Save all participants
-//                    assessmentParticipantRepository.saveAll(participantMap.values());
-//                }
-//            }
-//        }
-//
-//        return module;
-//    }
+
 
 
     public List<AssessmentDTO> getUserAssessmentsForModule(Long moduleId, String userEmail) {

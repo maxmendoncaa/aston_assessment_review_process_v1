@@ -664,6 +664,9 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
         lead.setResponseToExternalExaminerDateTime(assessmentDTO.getResponseToExternalExaminerDateTime());
         lead.setStage2_assessmentLeadComments(assessmentDTO.getStage2_assessmentLeadComments());
         lead.setStage2ModuleAssessmentLeadSignatureDateTime(assessmentDTO.getStage2ModuleAssessmentLeadSignatureDateTime());
+        lead.setResponseToInternalModeratorSignature(assessmentDTO.getResponseToInternalModeratorSignature());
+        lead.setResponseToExternalExaminerSignature(assessmentDTO.getResponseToExternalExaminerSignature());
+        lead.setStage2AssessmentLeadSignature(assessmentDTO.getStage2AssessmentLeadSignature());
 
         assessment.setSkills(assessmentDTO.getSkills());
         assessment.setAssessmentDeadline(assessmentDTO.getAssessmentDeadline());
@@ -687,6 +690,7 @@ public AssessmentDTO updateAssessment(Long id, AssessmentDTO assessmentDTO) {
         moderator.setInternalModeratorSignatureDateTime(assessmentDTO.getInternalModeratorSignatureDateTime());
         moderator.setStage2_moderatorComments(assessmentDTO.getStage2_moderatorComments());
         moderator.setModeratorSignatureDateTime(assessmentDTO.getModeratorSignatureDateTime());
+        moderator.setStage2ModeratorSignature(assessmentDTO.getStage2ModeratorSignature());
     }
 
     private void updateExternalExaminerFields(Assessment assessment, AssessmentDTO assessmentDTO) {
@@ -763,6 +767,9 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
         dto.setResponseToExternalExaminerDateTime(lead.getResponseToExternalExaminerDateTime());
         dto.setStage2_assessmentLeadComments(lead.getStage2_assessmentLeadComments());
         dto.setStage2ModuleAssessmentLeadSignatureDateTime(lead.getModuleAssessmentLeadSignatureDateTime());
+        dto.setResponseToInternalModeratorSignature(lead.getResponseToInternalModeratorSignature());
+        dto.setResponseToExternalExaminerSignature(lead.getResponseToExternalExaminerSignature());
+        dto.setStage2AssessmentLeadSignature(lead.getStage2AssessmentLeadSignature());
     }
 
     // Handle InternalModerator fields
@@ -773,6 +780,7 @@ private AssessmentDTO mapToDTO(Assessment assessment) {
         dto.setInternalModeratorSignatureDateTime(moderator.getInternalModeratorSignatureDateTime());
         dto.setModeratorSignatureDateTime(moderator.getModeratorSignatureDateTime());
         dto.setStage2_moderatorComments(moderator.getStage2_moderatorComments());
+        dto.setStage2ModeratorSignature(moderator.getStage2ModeratorSignature());
     }
 
     // Handle ExternalExaminerResponse

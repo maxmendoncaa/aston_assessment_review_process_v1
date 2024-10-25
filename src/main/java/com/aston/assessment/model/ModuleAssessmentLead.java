@@ -50,5 +50,13 @@ public class ModuleAssessmentLead {
     @Column(name="stage2_assessment_lead_comments")
     private String stage2_assessmentLeadComments;
 
+    @Column(name="response_to_internal_moderator_signature")
+    private String responseToInternalModeratorSignature="Pending";
+    @Column(name="response_to_external_examiner_signature")
+    private String responseToExternalExaminerSignature="Pending";
+    @Column(name="stage_2_assessment_lead_signature")
+    private String stage2AssessmentLeadSignature="Pending";
+
+
 
 }

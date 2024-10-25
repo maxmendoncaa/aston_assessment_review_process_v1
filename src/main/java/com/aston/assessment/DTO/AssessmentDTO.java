@@ -32,6 +32,11 @@ public class AssessmentDTO {
     private String responseToExternalExaminer;
     private LocalDateTime responseToExternalExaminerDateTime;
     private String stage2_assessmentLeadComments;
+    private String responseToInternalModeratorSignature;
+    private String responseToExternalExaminerSignature;
+    private String stage2AssessmentLeadSignature;
+
+
 
     // Internal Moderator fields
     private String internalModeratorComments;
@@ -39,6 +44,7 @@ public class AssessmentDTO {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime internalModeratorSignatureDateTime;
     private String stage2_moderatorComments;
+    private String stage2ModeratorSignature;
     private List<QuestionDTO> questions;
 
     // External Examiner fields

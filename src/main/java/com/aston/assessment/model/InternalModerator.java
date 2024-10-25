@@ -91,4 +91,7 @@ public class InternalModerator {
     @Column(name="stage2_moderator_comments")
     private String stage2_moderatorComments;
 
+    @Column(name = "stage2_moderator_signature")
+    private String stage2ModeratorSignature="Pending";
+
 }
